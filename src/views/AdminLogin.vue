@@ -42,7 +42,8 @@
             email: this.email,
             password: this.password,
           });
-          localStorage.setItem('token', response.data.token);
+          // setting the local storage items
+          localStorage.setItem('token', response.data.user.token);
           localStorage.setItem('role', 'admin');
           this.$router.push('/admin/dashboard');
         } catch (err) {

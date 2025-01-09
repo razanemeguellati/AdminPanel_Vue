@@ -1,18 +1,23 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import AdminLogin from '../views/AdminLogin.vue';
-import ClientLogin from '../views/ClientLogin.vue';
-import AdminDashboard from '../views/AdminDashboard.vue';
-import ClientDashboard from '../views/ClientDashboard.vue';
-import NotFound from '../views/NotFound.vue';
-// Admin Pages
 
+// Admin Pages
+import AdminLogin from '../views/AdminLogin.vue';
+import AdminDashboard from '../views/AdminDashboard.vue';
 import AdminLayout from '../layouts/AdminLayout.vue';
 import AdminProducts from '../views/AdminProducts.vue';
 import AdminUsers from '../views/AdminUsersPage.vue';
 import AdminOrders from '../views/AdminOrders.vue';
+import AdminSingleProduct from '../views/AdminSingleProduct.vue';
 
+// Client Pages
+import ClientLogin from '../views/ClientLogin.vue';
+import ClientDashboard from '../views/ClientDashboard.vue';
 import ClientRegister from '../views/ClientRegister.vue';
-import ClientForgotPassword from '../views/ClientRegister.vue';
+import ClientForgotPassword from '../views/ClientForgotPassword.vue';
+import ClientResetPassword from '../views/ClientResetPassword.vue';
+
+// Admin Pages
+import NotFound from '../views/NotFound.vue';
 
 const routes = [
   { path: '/', redirect: '/client/register' },
@@ -21,7 +26,7 @@ const routes = [
   { path: '/client/dashboard', component: ClientDashboard, meta: { requiresAuth: true, role: 'client' } },
   { path: "/client/register", component: ClientRegister, },
   { path: '/client/forgot-password', component: ClientForgotPassword, },
-  
+  { path: '/password-reset', component: ClientResetPassword },
   
   {
     path: '/admin',
@@ -36,6 +41,11 @@ const routes = [
   },
 
 
+  {
+    path: "/admin/products/:id",
+    name: "ProductDetails",
+    component: AdminSingleProduct,
+  },
  
 
   { path: '/:catchAll(.*)', component: NotFound }, // Catch-all for 404 pages
