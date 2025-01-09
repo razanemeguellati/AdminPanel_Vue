@@ -40,13 +40,13 @@ const routes = [
     ],
   },
 
-
   {
     path: "/admin/products/:id",
     name: "ProductDetails",
     component: AdminSingleProduct,
   },
  
+  
 
   { path: '/:catchAll(.*)', component: NotFound }, // Catch-all for 404 pages
 ];
