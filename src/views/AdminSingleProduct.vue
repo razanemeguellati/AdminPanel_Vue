@@ -9,13 +9,14 @@
           <p><strong>Price:</strong> {{ product.price }}</p>
           <p><strong>Quantity:</strong> {{ product.quantity }}</p>
           <p><strong>In Stock:</strong> {{ product.in_stock ? "Yes" : "No" }}</p>
+          <p><strong>In Order:</strong> {{ product.in_order ? "Yes" : "No" }}</p>
         </v-card-text>
       </v-card>
     </v-container>
   </template>
   
   <script>
-  import axios from "../axios"; // Adjust path if needed
+  import axios from "../axios"; // Adjust the path to your Axios instance
   
   export default {
     data() {
@@ -27,7 +28,7 @@
       const productId = this.$route.params.id; // Get product ID from the route
       try {
         const response = await axios.get(`/admin/products/${productId}`);
-        this.product = response.data; // Assign product data
+        this.product = response.data.data; // Assign the 'data' key from the response to product
       } catch (error) {
         console.error("Error fetching product details:", error);
       }

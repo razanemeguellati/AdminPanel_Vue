@@ -45,6 +45,7 @@ export default {
       ],
     };
   },
+  
   methods: {
     async fetchProducts() {
       this.loading = true; // Start loading
