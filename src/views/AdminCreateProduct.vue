@@ -4,6 +4,7 @@
         <v-card-title>Create New Product</v-card-title>
         <v-card-text>
           <v-form @submit.prevent="handleCreateProduct">
+
             <!-- Name -->
             <v-text-field
               v-model="form.name"
@@ -20,6 +21,7 @@
               required
             ></v-textarea>
   
+            
             <!-- Price -->
             <v-text-field
               v-model="form.price"
@@ -49,25 +51,31 @@
               required
             ></v-select>
   
+            <div class="">
+                
+            </div>
             <!-- In Stock -->
             <v-switch
-              v-model="form.in_stock"
-              label="In Stock"
-              inset
+            v-model="form.in_stock"
+            label="In Stock"
+            inset
+            :class="{ 'switch-on': form.in_stock, 'switch-off': !form.in_stock }"
             ></v-switch>
-  
+
             <!-- In Order -->
             <v-switch
-              v-model="form.in_order"
-              label="In Order"
-              inset
+            v-model="form.in_order"
+            label="In Order"
+            inset
+            :class="{ 'switch-on': form.in_order, 'switch-off': !form.in_order }"
             ></v-switch>
   
             <!-- File Upload -->
             <v-file-input
-              v-model="form.file"
-              label="Upload File"
+              v-model="form.files"
+              label="Upload Files"
               accept="image/*"
+              multiple
               outlined
             ></v-file-input>
   
@@ -80,6 +88,7 @@
     </v-container>
   </template>
   
+
   <script>
   import axios from "../axios"; // Adjust the path to your axios instance
   
@@ -94,13 +103,12 @@
           category_id: null,
           in_stock: true,
           in_order: false,
-          file: null,
+          files: [], // Updated to accept multiple files as an array
         },
         categories: [
           { text: "Category 1", value: 1 },
           { text: "Category 2", value: 2 },
-          { text: "Category 3", value: 3 },
-        ], // Adjust based on your categories
+        ],
         error: "", // To display errors
       };
     },
@@ -108,15 +116,17 @@
       async handleCreateProduct() {
         const formData = new FormData();
         Object.keys(this.form).forEach((key) => {
-          if (key === "file" && this.form[key]) {
-            formData.append(key, this.form[key]);
+          if (key === "files" && this.form.files.length > 0) {
+            this.form.files.forEach((file) => {
+              formData.append("file[]", file); // Append multiple files as an array
+            });
           } else {
             formData.append(key, this.form[key]);
           }
         });
   
         try {
-          const response = await axios.post("/admin/products/create", formData, {
+          const response = await axios.post("/admin/create-product", formData, {
             headers: {
               "Content-Type": "multipart/form-data",
             },
@@ -137,6 +147,14 @@
   </script>
   
   <style scoped>
-  /* Add additional styling if needed */
+  /* Add styles for the switches */
+  .switch-on .v-input__control {
+    background-color: green !important;
+  }
+  
+  .switch-off .v-input__control {
+    color: red !important;
+
+  }
   </style>
   

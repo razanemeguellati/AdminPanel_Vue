@@ -9,6 +9,8 @@ import AdminUsers from '../views/AdminUsersPage.vue';
 import AdminOrders from '../views/AdminOrders.vue';
 import AdminSingleProduct from '../views/AdminSingleProduct.vue';
 import AdminCreateProduct from '../views/AdminCreateProduct.vue'; // Import Create Product Page
+import AdminSingleUser from '../views/AdminSingleUser.vue';
+
 
 // Client Pages
 import ClientLogin from '../views/ClientLogin.vue';
@@ -16,6 +18,7 @@ import ClientDashboard from '../views/ClientDashboard.vue';
 import ClientRegister from '../views/ClientRegister.vue';
 import ClientForgotPassword from '../views/ClientForgotPassword.vue';
 import ClientResetPassword from '../views/ClientResetPassword.vue';
+
 
 // Not Found Page
 import NotFound from '../views/NotFound.vue';
@@ -46,6 +49,10 @@ const routes = [
     path: "/admin/products/:id",
     name: "ProductDetails",
     component: AdminSingleProduct,
+  },
+
+  {
+    path: "/admin/users/:id", omponent: AdminSingleUser // Adjust path to your Single User component
   },
 
   { path: '/:catchAll(.*)', component: NotFound }, // Catch-all for 404 pages
