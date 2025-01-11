@@ -33,6 +33,12 @@
             ></v-text-field>
             <v-btn color="primary" type="submit" block>Register</v-btn>
             <p v-if="error" class="red--text mt-4">{{ error }}</p>
+            <!-- Forgot Password Link -->
+            <p class="mt-4">
+              <router-link to="/client/login" class="blue--text">
+                already have an account?
+              </router-link>
+            </p>
           </v-form>
         </v-card-text>
       </v-card>
@@ -77,8 +83,10 @@
         });
 
         const { token } = response.data.user;
-        localStorage.setItem("authToken", token);
+        localStorage.setItem("token", token);
+        localStorage.setItem("clientEmail", this.email);
         this.$router.push("/client/dashboard");
+
     } catch (err) {
         this.error =
         err.response?.data?.message || "An error occurred. Please try again.";

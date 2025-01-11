@@ -51,8 +51,9 @@ export default {
             password: this.password,
           }
         );
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('role', 'client');
+        const { token } = response.data.user;
+        localStorage.setItem('token', token );
+        localStorage.setItem("clientEmail", this.email);
         this.$router.push('/client/dashboard');
       } catch (err) {
         this.error = 'Invalid login credentials';

@@ -39,7 +39,7 @@
         }
   
         try {
-          const response = await axios.delete(
+          const response = await axios.post(
             `/admin/products/${productId}/delete-product`
           );
           console.log("Delete Response:", response.data);

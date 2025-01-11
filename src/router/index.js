@@ -8,6 +8,7 @@ import AdminProducts from '../views/AdminProducts.vue';
 import AdminUsers from '../views/AdminUsersPage.vue';
 import AdminOrders from '../views/AdminOrders.vue';
 import AdminSingleProduct from '../views/AdminSingleProduct.vue';
+import AdminCreateProduct from '../views/AdminCreateProduct.vue'; // Import Create Product Page
 
 // Client Pages
 import ClientLogin from '../views/ClientLogin.vue';
@@ -16,7 +17,7 @@ import ClientRegister from '../views/ClientRegister.vue';
 import ClientForgotPassword from '../views/ClientForgotPassword.vue';
 import ClientResetPassword from '../views/ClientResetPassword.vue';
 
-// Admin Pages
+// Not Found Page
 import NotFound from '../views/NotFound.vue';
 
 const routes = [
@@ -24,8 +25,8 @@ const routes = [
   { path: '/admin/login', component: AdminLogin },
   { path: '/client/login', component: ClientLogin },
   { path: '/client/dashboard', component: ClientDashboard, meta: { requiresAuth: true, role: 'client' } },
-  { path: "/client/register", component: ClientRegister, },
-  { path: '/client/forgot-password', component: ClientForgotPassword, },
+  { path: "/client/register", component: ClientRegister },
+  { path: '/client/forgot-password', component: ClientForgotPassword },
   { path: '/password-reset', component: ClientResetPassword },
   
   {
@@ -35,6 +36,7 @@ const routes = [
     children: [
       { path: 'dashboard', component: AdminDashboard },
       { path: 'products', component: AdminProducts },
+      { path: 'products/create', component: AdminCreateProduct }, // Route for Create Product
       { path: 'users', component: AdminUsers },
       { path: 'orders', component: AdminOrders },
     ],
@@ -45,8 +47,6 @@ const routes = [
     name: "ProductDetails",
     component: AdminSingleProduct,
   },
- 
-  
 
   { path: '/:catchAll(.*)', component: NotFound }, // Catch-all for 404 pages
 ];
