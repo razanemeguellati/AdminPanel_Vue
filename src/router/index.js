@@ -8,9 +8,8 @@ import AdminProducts from '../views/AdminProducts.vue';
 import AdminUsers from '../views/AdminUsersPage.vue';
 import AdminOrders from '../views/AdminOrders.vue';
 import AdminSingleProduct from '../views/AdminSingleProduct.vue';
-import AdminCreateProduct from '../views/AdminCreateProduct.vue'; // Import Create Product Page
+import AdminCreateProduct from '../views/AdminCreateProduct.vue';
 import AdminSingleUser from '../views/AdminSingleUser.vue';
-
 
 // Client Pages
 import ClientLogin from '../views/ClientLogin.vue';
@@ -18,7 +17,6 @@ import ClientDashboard from '../views/ClientDashboard.vue';
 import ClientRegister from '../views/ClientRegister.vue';
 import ClientForgotPassword from '../views/ClientForgotPassword.vue';
 import ClientResetPassword from '../views/ClientResetPassword.vue';
-
 
 // Not Found Page
 import NotFound from '../views/NotFound.vue';
@@ -39,7 +37,7 @@ const routes = [
     children: [
       { path: 'dashboard', component: AdminDashboard },
       { path: 'products', component: AdminProducts },
-      { path: 'products/create', component: AdminCreateProduct }, // Route for Create Product
+      { path: 'products/create', component: AdminCreateProduct },
       { path: 'users', component: AdminUsers },
       { path: 'orders', component: AdminOrders },
     ],
@@ -52,7 +50,9 @@ const routes = [
   },
 
   {
-    path: "/admin/users/:id", omponent: AdminSingleUser // Adjust path to your Single User component
+    path: "/admin/users/:id",
+    name: "AdminSingleUser",
+    component: AdminSingleUser
   },
 
   { path: '/:catchAll(.*)', component: NotFound }, // Catch-all for 404 pages

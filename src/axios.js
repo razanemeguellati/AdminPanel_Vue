@@ -14,5 +14,22 @@ instance.interceptors.request.use((config) => {
   }
   return config;
 });
+//
+// router.beforeEach((to, from, next) => {
+//   const isAuthenticated = localStorage.getItem("token");
+//   const userRole = localStorage.getItem("role"); // Retrieve role from localStorage
 
+//   if (to.meta.requiresAuth) {
+//     if (!isAuthenticated) {
+//       next("/client/login"); // Redirect to login if not authenticated
+//     } else if (to.meta.role && to.meta.role !== userRole) {
+//       next("/"); // Redirect if role mismatch
+//     } else {
+//       next(); // Proceed if authentication and role match
+//     }
+//   } else {
+//     next();
+//   }
+// });
+//
 export default instance;

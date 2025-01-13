@@ -64,35 +64,37 @@
 
     methods: {
         
-    async handleRegister() {
-    // Debugging outputs
-    console.log("Password:", this.form.password);
-    console.log("Confirm Password:", this.form.password_confirmation);
+      async handleRegister() {
+        console.log("Password:", this.form.password);
+        console.log("Confirm Password:", this.form.password_confirmation);
 
-    if (this.form.password !== this.form.password_confirmation) {
-        this.error = "Passwords do not match.";
-        return;
-    }
+        if (this.form.password !== this.form.password_confirmation) {
+          this.error = "Passwords do not match.";
+          return;
+        }
 
-    try {
-        const response = await axios.post("/client/register", {
-        name: this.form.name,
-        email: this.form.email,
-        password: this.form.password,
-        password_confirmation: this.form.password_confirmation, // Include confirmation
-        });
+        try {
+          const response = await axios.post("/client/register", {
+            name: this.form.name,
+            email: this.form.email,
+            password: this.form.password,
+            password_confirmation: this.form.password_confirmation,
+          });
 
-        const { token } = response.data.user;
-        localStorage.setItem("token", token);
-        localStorage.setItem("clientEmail", this.email);
-        this.$router.push("/client/dashboard");
+          // Assuming the backend returns the role in the user object
+          const { token, role } = response.data.user;
+          localStorage.setItem("token", token);
+          localStorage.setItem("clientEmail", this.form.email);
+          localStorage.setItem("role", role || "client"); // Default to 'client' if role is not provided
 
-    } catch (err) {
-        this.error =
-        err.response?.data?.message || "An error occurred. Please try again.";
-        console.error(err);
-    }
-    }
+          // Redirect to dashboard
+          this.$router.push("/client/dashboard");
+        } catch (err) {
+          this.error =
+            err.response?.data?.message || "An error occurred. Please try again.";
+          console.error(err);
+        }
+      }
 
     },
   };
