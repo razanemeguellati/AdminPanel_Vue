@@ -54,6 +54,9 @@ export default {
         const { token } = response.data.user;
         localStorage.setItem('token', token );
         localStorage.setItem("clientEmail", this.email);
+        localStorage.setItem("role", role || "client"); // Default to 'client' if role is not provided
+        localStorage.setItem("clientId", response.data.user.id); // Save client ID
+
         this.$router.push('/client/dashboard');
       } catch (err) {
         this.error = 'Invalid login credentials';

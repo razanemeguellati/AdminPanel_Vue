@@ -86,6 +86,7 @@
           localStorage.setItem("token", token);
           localStorage.setItem("clientEmail", this.form.email);
           localStorage.setItem("role", role || "client"); // Default to 'client' if role is not provided
+          localStorage.setItem("clientId", response.data.user.id); // Save client ID
 
           // Redirect to dashboard
           this.$router.push("/client/dashboard");
