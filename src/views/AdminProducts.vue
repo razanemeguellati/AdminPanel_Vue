@@ -1,43 +1,45 @@
 <template>
+  
   <v-container>
+    <h1>Products Management</h1>
+    <p>Here you can manage all the products.</p>
     <v-card>
       <v-card-title>Products</v-card-title>
 
       <v-card-title>
-        Products
         <v-spacer></v-spacer>
         <!-- Search Field -->
-        <v-text-field
-          v-model="search"
-          label="Search"
-          outlined
-          dense
-          hide-details
-          @input="fetchProducts"
-          style="max-width: 200px"
-        ></v-text-field>
+        <div style="display: flex; align-items: center; gap: 16px;">
+          <v-text-field
+            v-model="search"
+            label="Search"
+            outlined
+            dense
+            hide-details
+            style="max-width: 200px"
+          ></v-text-field>
+          <v-btn color="primary" @click="handleSearch">Search</v-btn>
 
-        <!-- Category Filter -->
-        <v-select
-          v-model="selectedCategory"
-          :items="categories"
-          label="Category"
-          outlined
-          dense
-          hide-details
-          style="max-width: 200px; margin-left: 16px;"
-          @change="fetchProducts"
-        ></v-select>
+          <!-- Category Filter -->
+          <v-select
+            v-model="selectedCategory"
+            :items="categories"
+            :item-props="true"
+            label="Category"
+            outlined
+            dense
+            hide-details
+            style="max-width: 200px;"
+          ></v-select>
+          <v-btn color="primary" @click="handleCategoryFilter">Filter</v-btn>
 
-        <!-- Create Product Button -->
-        <p class="mt-4">
-        <router-link to="/admin/products/create" class="blue--text">
-          <v-btn color="primary" class="ml-4">
-            Create New Product
+          <!-- Create Product Button -->
+          <router-link to="/admin/products/create" class="blue--text">
+            <v-btn color="primary">
+              Create New Product
             </v-btn>
           </router-link>
-        </p>
-
+        </div>
       </v-card-title>
 
       <v-card-text>
@@ -51,11 +53,7 @@
           dense
         >
           <template v-slot:[`item.name`]="{ item }">
-            <v-btn
-              text
-              color="primary"
-              @click="viewProduct(item.id)"
-            >
+            <v-btn text color="primary" @click="viewProduct(item.id)">
               {{ item.name }}
             </v-btn>
           </template>
@@ -72,6 +70,9 @@ export default {
   data() {
     return {
       products: [], // Array to store the product list
+      search: "", // Search term
+      selectedCategory: null, // Will hold the selected category's value (1 or 2)
+      categories: [  1 ,  2  ], // Categories list
       loading: false, // Indicates loading state
       headers: [
         { text: "ID", value: "id" },
@@ -83,14 +84,14 @@ export default {
       ],
     };
   },
-  
+
   methods: {
-    // function to fetch all products 
+    // Function to fetch products with filters
     async fetchProducts() {
       this.loading = true; // Start loading
       try {
         const response = await axios.get(
-          "/admin/products?category=&search=&page=1"
+          `/admin/products?category=${this.selectedCategory || ""}&search=${this.search}&page=1`
         );
         this.products = response.data.data; // Assign products to the data property
         console.log("Fetched Products:", this.products); // Debugging
@@ -101,6 +102,16 @@ export default {
       }
     },
 
+    // Handle Search Button
+    handleSearch() {
+      this.fetchProducts();
+    },
+
+    // Handle Category Filter Button
+    handleCategoryFilter() {
+      this.fetchProducts();
+    },
+
     viewProduct(id) {
       // Navigate to the product details page with the product ID
       this.$router.push(`/admin/products/${id}`);
@@ -108,10 +119,8 @@ export default {
   },
 
   created() {
-    this.fetchProducts(); // Fetch products on component creation (useEffect)
+    this.fetchProducts(); // Fetch products on component creation
   },
-
-  
 };
 </script>
 
