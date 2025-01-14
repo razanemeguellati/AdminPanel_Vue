@@ -34,13 +34,13 @@
 
 
 <script>
-import axios from "../axios"; // Adjust the path to your axios instance
+import axios from "../axios"; 
 
 export default {
   data() {
     return {
-      orders: [], // Array to store orders
-      loading: false, // Loading state for data table
+      orders: [], 
+      loading: false, 
       headers: [
         { text: "Order ID", value: "id" },
         { text: "Customer Name", value: "customer_name" },
@@ -51,17 +51,17 @@ export default {
     };
   },
   methods: {
-    // Fetch orders from backend
+   
     async fetchOrders() {
-      this.loading = true; // Start loading
+      this.loading = true; 
       try {
-        const response = await axios.get("/admin/orders"); // Adjust API endpoint
-        this.orders = response.data.data; // Assign orders data
-        console.log("Fetched Orders:", this.orders); // Debugging
+        const response = await axios.get("/admin/orders"); 
+        this.orders = response.data.data; 
+        console.log("Fetched Orders:", this.orders); 
       } catch (error) {
         console.error("Error fetching orders:", error);
       } finally {
-        this.loading = false; // Stop loading
+        this.loading = false; 
       }
     },
     // Navigate to single order page

@@ -86,28 +86,28 @@ export default {
   },
 
   methods: {
-    // Function to fetch products with filters
+    
     async fetchProducts() {
-      this.loading = true; // Start loading
+      this.loading = true;
       try {
         const response = await axios.get(
           `/admin/products?category=${this.selectedCategory || ""}&search=${this.search}&page=1`
         );
-        this.products = response.data.data; // Assign products to the data property
-        console.log("Fetched Products:", this.products); // Debugging
+        this.products = response.data.data; 
+        console.log("Fetched Products:", this.products); 
       } catch (error) {
         console.error("Error fetching products:", error);
       } finally {
-        this.loading = false; // Stop loading
+        this.loading = false; 
       }
     },
 
-    // Handle Search Button
+    
     handleSearch() {
       this.fetchProducts();
     },
 
-    // Handle Category Filter Button
+    
     handleCategoryFilter() {
       this.fetchProducts();
     },
