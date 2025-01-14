@@ -31,37 +31,47 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   data() {
     return {
-      email: '',
-      password: '',
-      error: '',
+      email: "",
+      password: "",
+      error: "",
     };
   },
   methods: {
     async handleLogin() {
       try {
         const response = await axios.post(
-          'http://192.168.1.17:8000/api/client/login',
+          "http://192.168.1.17:8000/api/client/login",
           {
             email: this.email,
             password: this.password,
           }
         );
-        const { token } = response.data.user;
-        localStorage.setItem('token', token );
-        localStorage.setItem("clientEmail", this.email);
-        localStorage.setItem("role", role || "client"); // Default to 'client' if role is not provided
+
+        // Extract token and role
+        const { token, role } = response.data.user;
+        console.log( response.data.user)
+        // Save token, email, role, and client ID in localStorage
+        localStorage.setItem("token", token);
+        localStorage.setItem("clientEmail", this.email); // Corrected from `this.form.email`
+        localStorage.setItem("role", role || "client"); // Default role is 'client'
         localStorage.setItem("clientId", response.data.user.id); // Save client ID
 
-        this.$router.push('/client/dashboard');
+        // Redirect to client dashboard
+        this.$router.push("/client/dashboard");
       } catch (err) {
-        this.error = 'Invalid login credentials';
+        this.error = "Invalid login credentials"; // Display error message
+        console.error(err); // Log error for debugging
       }
     },
   },
 };
 </script>
+
+<style scoped>
+/* Add any custom styles here */
+</style>

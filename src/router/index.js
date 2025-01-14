@@ -28,8 +28,16 @@ const routes = [
   { path: '/client/dashboard', component: ClientDashboard, meta: { requiresAuth: true, role: 'client' } },
   { path: "/client/register", component: ClientRegister },
   { path: '/client/forgot-password', component: ClientForgotPassword },
-  { path: '/password-reset', component: ClientResetPassword },
-  
+  {
+      path: '/password-reset/:token',
+      component: ClientResetPassword,
+      props: (route) => ({
+        token: route.params.token, // Extract token from the path parameter
+        email: route.query.email, // Extract email from the query parameter
+        
+      }),
+    },
+
   {
     path: '/admin',
     component: AdminLayout,

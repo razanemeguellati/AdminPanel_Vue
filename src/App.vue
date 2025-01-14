@@ -31,6 +31,8 @@ export default {
       // Clear user data and redirect to the login page
       localStorage.removeItem('token');
       localStorage.removeItem('role');
+      localStorage.removeItem('clientEmail');
+      localStorage.removeItem('clientId');
       this.$router.push('/client/login');
     },
   },

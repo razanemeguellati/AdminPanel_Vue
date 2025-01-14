@@ -1,5 +1,5 @@
 <template>
-  <p> this is a dashboard</p>
+  <h1> Welcome Admin </h1>
 </template>
 
 <script>
@@ -8,4 +8,7 @@
 
 <style scoped>
 /* Add additional styles if needed */
+h1{
+  margin: 10%; 
+}
 </style>

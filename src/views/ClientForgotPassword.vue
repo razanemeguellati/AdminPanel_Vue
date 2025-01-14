@@ -10,7 +10,7 @@
               type="email"
               required
             ></v-text-field>
-            <v-btn type="submit" color="primary" block>Submit</v-btn>
+            <v-btn type="submit" color="primary" block>Get link </v-btn>
           </v-form>
           <p v-if="message" class="green--text mt-2">{{ message }}</p>
           <p v-if="error" class="red--text mt-2">{{ error }}</p>

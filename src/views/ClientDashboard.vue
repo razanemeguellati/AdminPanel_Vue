@@ -1,7 +1,7 @@
 <template>
   <v-container>
-    <h1>Client Dashboard</h1>
-    <p>Welcome, {{ clientEmail }}!</p>
+    <h1> Client Dashboard</h1>
+    <p> Welcome, {{ clientEmail }}!</p>
     <v-alert v-if="notification" type="warning" class="mt-4">
       {{ notification }}
     </v-alert>
@@ -42,6 +42,7 @@ export default {
       }
 
   },
+  
   created() {
     // Retrieve the email and client ID from localStorage
     this.clientEmail = localStorage.getItem("clientEmail");
