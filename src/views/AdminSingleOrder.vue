@@ -55,49 +55,48 @@
   </template>
   
   <script>
-  import axios from "../axios"; // Adjust the path to your Axios instance
-  
-  export default {
-    data() {
-      return {
-        order: null, // Initialize order as null
-        productHeaders: [
-          { text: "Product Name", value: "name" },
-          { text: "Quantity", value: "quantity" },
-          { text: "Price", value: "price" },
-        ],
-      };
+import axios from "../axios"; // Adjust the path to your Axios instance
+
+export default {
+  data() {
+    return {
+      order: null, // Initialize order as null
+      productHeaders: [
+        { text: "Product Name", value: "name" },
+        { text: "Quantity", value: "quantity" },
+        { text: "Price", value: "price" },
+      ],
+    };
+  },
+  methods: {
+    async fetchOrder() {
+      const orderId = this.$route.params.id; // Get order ID from route
+      try {
+        const response = await axios.get(`/admin/orders/${orderId}`);
+        this.order = response.data.order; // Assign the fetched order data
+      } catch (error) {
+        console.error("Error fetching order details:", error);
+        alert("Failed to fetch order details. Please try again.");
+      }
     },
-    methods: {
-      async fetchOrder() {
-        const orderId = this.$route.params.id; // Get order ID from route
+
+    async updateOrder() {
+      if (confirm(`Are you sure you want to accept order #${this.order.id}?`)) {
         try {
-          const response = await axios.get(`/admin/orders/${orderId}`);
-          this.order = response.data.order; // Assign the fetched order data
+          await axios.post(`/admin/orders/${this.order.id}/update-order`, {
+            status: "accepted",
+          });
+          alert("Order status updated to accepted successfully!");
+          this.fetchOrder(); // Refresh order data
         } catch (error) {
-          console.error("Error fetching order details:", error);
-          alert("Failed to fetch order details. Please try again.");
+          console.error("Error updating order:", error);
+          alert("Failed to update the order status. Please try again.");
         }
-      },
-
-      async updateOrder() {
-        if (confirm(`Are you sure you want to accept order #${this.order.id}?`)) {
-          try {
-            await axios.post(`/admin/orders/${this.order.id}/update-order`, {
-              status: "accepted",
-            });
-            alert("Order status updated to accepted successfully!");
-            this.fetchOrder(); // Refresh order data
-          } catch (error) {
-            console.error("Error updating order:", error);
-            alert("Failed to update the order status. Please try again.");
-          }
-        }
-      },
+      }
     },
 
-    async deleteOrder() {
-        console.log(this.order.id);
+    async deleteOrder() { // Move this inside `methods`
+      console.log(this.order.id);
       if (confirm("Are you sure you want to delete this order?")) {
         try {
           await axios.post(`/admin/orders/${this.order.id}/delete`);
@@ -110,13 +109,14 @@
         }
       }
     },
+  },
 
-    async created() {
-      this.fetchOrder(); // Fetch the order data on component creation
-    },
-  };
-  </script>
-  
+  async created() {
+    this.fetchOrder(); // Fetch the order data on component creation
+  },
+};
+</script>
+
   <style scoped>
   /* Add custom styles here */
   </style>
