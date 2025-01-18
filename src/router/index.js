@@ -10,7 +10,7 @@ import AdminOrders from '../views/AdminOrders.vue';
 import AdminSingleProduct from '../views/AdminSingleProduct.vue';
 import AdminCreateProduct from '../views/AdminCreateProduct.vue';
 import AdminSingleUser from '../views/AdminSingleUser.vue';
-
+import AdminSingleOrder from '../views/AdminSingleOrder.vue';
 // Client Pages
 import ClientLogin from '../views/ClientLogin.vue';
 import ClientDashboard from '../views/ClientDashboard.vue';
@@ -63,6 +63,9 @@ const routes = [
       { path: 'orders', component: AdminOrders },
     ],
   },
+
+
+  { path: '/admin/orders/:id', component: AdminSingleOrder },
 
   {
     path: "/admin/products/:id",

@@ -8,7 +8,7 @@
       <v-card-title>Orders List</v-card-title>
       <v-card-text>
         <v-data-table
-          :headers="headers"
+          :headers="ordersheaders"
           :items="orders"
           :loading="loading"
           loading-text="Loading orders..."
@@ -25,46 +25,46 @@
               Order #{{ item.id }}
             </v-btn>
           </template>
+         
+          <template v-slot:[`item.status`]="{ item }">
+            {{ item.status }}
+          </template>
+         
         </v-data-table>
       </v-card-text>
     </v-card>
   </v-container>
 </template>
 
-
-
 <script>
-import axios from "../axios"; 
+import axios from "../axios"; // Adjust the path to your Axios instance
 
 export default {
   data() {
     return {
-      orders: [], 
-      loading: false, 
-      headers: [
+      orders: [], // Orders data
+      loading: false, // Indicates loading state
+      ordersheaders: [
         { text: "Order ID", value: "id" },
-        { text: "Customer Name", value: "customer_name" },
-        { text: "Total Price", value: "total_price" },
+        { text: "Customer Name", value: "user.name" }, // Ensure this matches your API response
         { text: "Status", value: "status" },
-        { text: "Created At", value: "created_at" },
+   
       ],
     };
   },
   methods: {
-   
     async fetchOrders() {
-      this.loading = true; 
+      this.loading = true; // Start loading
       try {
-        const response = await axios.get("/admin/orders"); 
-        this.orders = response.data.data; 
-        console.log("Fetched Orders:", this.orders); 
+        const response = await axios.get("/admin/orders"); // Adjust API endpoint
+        this.orders = response.data.data; // Map API response
+        console.log("Fetched Orders:", this.orders); // Debugging
       } catch (error) {
         console.error("Error fetching orders:", error);
       } finally {
-        this.loading = false; 
+        this.loading = false; // Stop loading
       }
     },
-    // Navigate to single order page
     viewOrder(orderId) {
       this.$router.push(`/admin/orders/${orderId}`); // Navigate to order details page
     },
