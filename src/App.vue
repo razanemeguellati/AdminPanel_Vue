@@ -5,7 +5,7 @@
       <v-app-bar app color="primary" dark>
         <v-toolbar-title>Vue Test App</v-toolbar-title>
         <v-spacer> </v-spacer>
-       
+
         <v-btn v-if="isAuthenticated" color="secondary" @click="logout">
           Logout
         </v-btn>
@@ -18,21 +18,25 @@
 </template>
 
 <script>
+import { useAuthStore } from "./authStore"; // Adjust the path based on your folder structure
+import { mapState, mapActions } from 'pinia';
+
 export default {
   computed: {
+    ...mapState(useAuthStore, ['token']),
+
     isAuthenticated() {
-      // Check if the user is logged in
-      return !!localStorage.getItem('token');
+      // Check if the user is logged in based on the Pinia store
+      return !!this.token;
     },
   },
 
   methods: {
+    ...mapActions(useAuthStore, ['clearAuthData']),
+
     logout() {
-      // Clear user data and redirect to the login page
-      localStorage.removeItem('token');
-      localStorage.removeItem('role');
-      localStorage.removeItem('clientEmail');
-      localStorage.removeItem('clientId');
+      // Clear user data in the Pinia store and redirect to the login page
+      this.clearAuthData();
       this.$router.push('/client/login');
     },
   },

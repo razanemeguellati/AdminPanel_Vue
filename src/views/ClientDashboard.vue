@@ -10,6 +10,7 @@
 
 <script>
 import pusher from "../pusher"; // Import the initialized Pusher instance
+import { useAuthStore } from "../authStore"; // Adjust path to your store
 
 export default {
   data() {
@@ -22,33 +23,41 @@ export default {
   methods: {
     listenForBlockEvent() {
 
-        var clientId = localStorage.getItem("clientId"); // Retrieve the client ID from storage
-        if (!clientId) {
-          console.error("Client ID is missing.");
-          return;
-        }
-        var clientChannel = pusher.subscribe('originova-channel'); // Use a dynamic channel
-        clientChannel.bind("user-logout", (data) => { console.log(data);
-          this.notification = `You have been blocked by the admin. Reason: ${
-            data.reason || "No reason provided."
-          }`;
-         
-          // Optional: Clear the notification after a few seconds
-          setTimeout(() => {
-            this.notification = null;
-          }, 10000);
-        });
-        pusher.logToConsole= true;
-      }
 
+  // Subscribe to a client-specific channel
+  const clientChannel = pusher.subscribe('originova-channel');
+  clientChannel.bind("user-logout", (data) => {
+    console.log("Block event received:", data);
+
+    // Display the notification
+    this.notification = `You have been blocked by the admin. Reason: ${
+      data.reason || "No reason provided."
+    }`;
+
+    // Clear auth data and redirect to login after a delay
+    const authStore = useAuthStore();
+    authStore.clearAuthData();
+
+    // Wait for 5 seconds before redirecting
+    setTimeout(() => {
+      this.$router.push("/client/login");
+    }, 3000); 
+
+  });
+
+  pusher.logToConsole = true;
+}
   },
-  
   created() {
     // Retrieve the email and client ID from localStorage
-    this.clientEmail = localStorage.getItem("clientEmail");
-    this.clientId = localStorage.getItem("clientId"); // Ensure clientId is stored during login
+    // this.clientEmail = localStorage.getItem("clientEmail");
+    // this.clientId = localStorage.getItem("clientId"); // Ensure clientId is stored during login
+    const authStore = useAuthStore(); // Initialize Pinia store
 
-    if (this.clientId) {
+    // Access data from the Pinia store
+    this.clientEmail = authStore.email; // Assuming 'email' is the key in your store
+
+    if (this.clientEmail) {
       this.listenForBlockEvent(); // Start listening for real-time events
     } else {
       console.error("Client ID is missing. Real-time events cannot be subscribed.");

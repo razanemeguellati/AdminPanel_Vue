@@ -1,5 +1,4 @@
 <template>
-  
   <v-container>
     <h1>Products Management</h1>
     <p>Here you can manage all the products.</p>
@@ -16,9 +15,9 @@
             outlined
             dense
             hide-details
-            style="max-width: 200px"
+            style="max-width: 400px"
+            @input="debouncedFetchProducts"
           ></v-text-field>
-          <v-btn color="primary" @click="handleSearch">Search</v-btn>
 
           <!-- Category Filter -->
           <v-select
@@ -30,8 +29,8 @@
             dense
             hide-details
             style="max-width: 200px;"
+            @input="debouncedFetchProducts"
           ></v-select>
-          <v-btn color="primary" @click="handleCategoryFilter">Filter</v-btn>
 
           <!-- Create Product Button -->
           <router-link to="/admin/products/create" class="blue--text">
@@ -58,6 +57,14 @@
             </v-btn>
           </template>
         </v-data-table>
+
+        <!-- Pagination Controls -->
+        <v-pagination
+          v-model="pagination.currentPage" 
+          :length="pagination.lastPage" 
+          @input="fetchProducts"
+        ></v-pagination>
+
       </v-card-text>
     </v-card>
   </v-container>
@@ -65,15 +72,19 @@
 
 <script>
 import axios from "../axios"; // Adjust the path to your axios instance
+import _ from "lodash"; // Import Lodash for debouncing
 
 export default {
   data() {
     return {
-      products: [], // Array to store the product list
-      search: "", // Search term
+
+      products: [], 
+      search: "", 
+
       selectedCategory: null, // Will hold the selected category's value (1 or 2)
-      categories: [  1 ,  2  ], // Categories list
-      loading: false, // Indicates loading state
+      categories: [1, 2], 
+      loading: false,
+
       headers: [
         { text: "ID", value: "id" },
         { text: "Name", value: "name" },
@@ -82,34 +93,38 @@ export default {
         { text: "Quantity", value: "quantity" },
         { text: "In Stock", value: "in_stock" },
       ],
+
+      pagination: {
+        currentPage: 1,
+        lastPage: 1,
+        perPage: 10,
+        total: 0,
+      },
     };
   },
 
   methods: {
-    
     async fetchProducts() {
       this.loading = true;
       try {
         const response = await axios.get(
-          `/admin/products?category=${this.selectedCategory || ""}&search=${this.search}&page=1`
+          `/admin/products?category=${this.selectedCategory || ""}&search=${this.search}&page=${this.pagination.currentPage}`
         );
-        this.products = response.data.data; 
-        console.log("Fetched Products:", this.products); 
+
+        this.products = response.data.data;
+        this.pagination = {
+          currentPage: response.data.pagination.currentPage,
+          lastPage: response.data.pagination.lastPage,
+          perPage: response.data.pagination.perPage,
+          total: response.data.pagination.total,
+        };
+
+        console.log("Fetched Products:", this.products);
       } catch (error) {
         console.error("Error fetching products:", error);
       } finally {
-        this.loading = false; 
+        this.loading = false;
       }
-    },
-
-    
-    handleSearch() {
-      this.fetchProducts();
-    },
-
-    
-    handleCategoryFilter() {
-      this.fetchProducts();
     },
 
     viewProduct(id) {
@@ -119,7 +134,19 @@ export default {
   },
 
   created() {
+    // Debounced version of fetchProducts to handle real-time filtering
+    this.debouncedFetchProducts = _.debounce(this.fetchProducts, 300);
     this.fetchProducts(); // Fetch products on component creation
+  },
+
+  watch: {
+   
+    search() {
+     // this.pagination.currentPage = 1;
+    },
+    selectedCategory() {
+     // this.pagination.currentPage = 1;
+    },
   },
 };
 </script>

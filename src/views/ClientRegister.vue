@@ -47,7 +47,8 @@
   
   <script>
   import axios from "../axios"; // Ensure this matches your Axios setup path
-  
+  import { useAuthStore } from "../authStore"; // Ensure the path matches where your auth store is located
+
   export default {
     data() {
       return {
@@ -83,10 +84,17 @@
 
           // Assuming the backend returns the role in the user object
           const { token, role } = response.data.user;
-          localStorage.setItem("token", token);
-          localStorage.setItem("clientEmail", this.form.email);
-          localStorage.setItem("role", role || "client"); // Default to 'client' if role is not provided
-          localStorage.setItem("clientId", response.data.user.id); // Save client ID
+          // localStorage.setItem("token", token);
+          // localStorage.setItem("clientEmail", this.form.email);
+          // localStorage.setItem("role", role || "client"); // Default to 'client' if role is not provided
+         
+
+          const authStore = useAuthStore();
+          authStore.setAuthData(
+          token, // Token
+          this.form.email, // Email 
+          "client" // role 
+        );
 
           // Redirect to dashboard
           this.$router.push("/client/dashboard");

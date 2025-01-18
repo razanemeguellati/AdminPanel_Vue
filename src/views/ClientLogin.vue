@@ -32,6 +32,7 @@
 
 <script>
 import axios from "axios";
+import { useAuthStore } from "../authStore"; // Ensure the path matches where your auth store is located
 
 export default {
   data() {
@@ -56,10 +57,17 @@ export default {
         const { token, role } = response.data.user;
         console.log( response.data.user)
         // Save token, email, role, and client ID in localStorage
-        localStorage.setItem("token", token);
-        localStorage.setItem("clientEmail", this.email); // Corrected from `this.form.email`
-        localStorage.setItem("role", role || "client"); // Default role is 'client'
-        localStorage.setItem("clientId", response.data.user.id); // Save client ID
+        // localStorage.setItem("token", token);
+        // localStorage.setItem("clientEmail", this.email); // Corrected from `this.form.email`
+        // localStorage.setItem("role", role || "client"); // Default role is 'client'
+        // localStorage.setItem("clientId", response.data.user.id); // Save client ID
+
+        const authStore = useAuthStore();
+          authStore.setAuthData(
+          token, // Token
+          this.email, // Email 
+          "client" // role 
+        );
 
         // Redirect to client dashboard
         this.$router.push("/client/dashboard");
