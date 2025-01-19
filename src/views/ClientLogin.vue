@@ -1,4 +1,4 @@
-<template>
+<template> 
   <v-container>
     <v-card class="mx-auto my-12" max-width="400">
       <v-card-title>Client Login</v-card-title>
@@ -18,6 +18,7 @@
           ></v-text-field>
           <v-btn type="submit" color="primary" block>Login</v-btn>
         </v-form>
+        <!-- Display error messages -->
         <p v-if="error" class="red--text mt-2">{{ error }}</p>
         <!-- Forgot Password Link -->
         <p class="mt-4">
@@ -27,6 +28,20 @@
         </p>
       </v-card-text>
     </v-card>
+
+    <!-- Dialog for Error Message -->
+    <v-dialog v-model="errorDialog" max-width="400">
+      <v-card>
+        <v-card-title>Error</v-card-title>
+        <v-card-text>
+          {{ errorMessage }}
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" text @click="errorDialog = false">Close</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -39,7 +54,9 @@ export default {
     return {
       email: "",
       password: "",
-      error: "",
+      error: "", // To display error messages
+      errorDialog: false, // Dialog state for error message
+      errorMessage: "", // Specific error message to display in the dialog
     };
   },
   methods: {
@@ -53,21 +70,34 @@ export default {
           }
         );
 
-        // Extract token and role
-        const { token, role } = response.data.user;
-        console.log( response.data.user)
+        // If login is successful, extract token and role
+        if (response.data.user) {
+          const { token, role } = response.data.user;
 
-        const authStore = useAuthStore();
+          const authStore = useAuthStore();
           authStore.setAuthData(
-          token, // Token
-          this.email, // Email 
-          "client" // role 
-        );
+            token, // Token
+            this.email, // Email
+            "client" // Role
+          );
 
-        // Redirect to client dashboard
-        this.$router.push("/client/dashboard");
+          // Redirect to client dashboard
+          this.$router.push("/client/dashboard");
+        } else if (response.data.message) {
+          // If blocked, show the error message in the dialog
+          this.errorMessage = response.data.message;
+          this.errorDialog = true;
+        }
       } catch (err) {
-        this.error = "Invalid login credentials"; // Display error message
+        if (err.response && err.response.data && err.response.data.message) {
+          // Display the specific error message from the response
+          this.errorMessage = err.response.data.message;
+          this.errorDialog = true; // Open the dialog
+        } else {
+          // Fallback generic error message
+          this.errorMessage = "Invalid login credentials";
+          this.errorDialog = true; // Open the dialog
+        }
         console.error(err); // Log error for debugging
       }
     },

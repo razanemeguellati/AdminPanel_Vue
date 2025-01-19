@@ -114,7 +114,7 @@ export default {
       try {
         await axios.delete(`/admin/users/${this.user.id}`);
         this.dialog = false; // Close the dialog
-        alert("User deleted successfully!");
+       
         this.$router.push("/admin/users"); // Redirect to users list
       } catch (error) {
         console.error("Error deleting user:", error);
