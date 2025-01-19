@@ -9,7 +9,7 @@
       <v-card-text>
         <v-data-table
           :headers="headers"
-          :items="users"
+          :items="filteredUsers"
           :loading="loading"
           loading-text="Loading users..."
           class="elevation-1"
@@ -24,6 +24,9 @@
             >
               {{ item.name }}
             </v-btn>
+          </template>
+          <template v-slot:[`item.role.name`]="{ item }">
+            {{ item.role.name }}
           </template>
         </v-data-table>
       </v-card-text>
@@ -44,12 +47,18 @@ export default {
         { text: "Name", value: "name" },
         { text: "Email", value: "email" },
         { text: "Status", value: "status" },
-        { text: "Role", value: "role" },
+        { text: "Role", value: "role.name" }, // Match nested role name
       ],
     };
   },
+  computed: {
+    // Filter out users with the role "Admin"
+    filteredUsers() {
+      return this.users.filter((user) => user.role.name !== "Admin");
+    },
+  },
   methods: {
-    // Fetch users from backend
+    // Fetch users from the backend
     async fetchUsers() {
       this.loading = true; // Start loading
       try {
