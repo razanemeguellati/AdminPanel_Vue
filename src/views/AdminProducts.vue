@@ -82,7 +82,7 @@ export default {
       search: "", 
 
       selectedCategory: null, // Will hold the selected category's value (1 or 2)
-      categories: [1, 2], 
+      categories: [{title: "first category", value: 1 }, {title: "second category", value: 2 }], 
       loading: false,
 
       headers: [
@@ -143,9 +143,14 @@ export default {
 
   // watching the variable that change and fire the debounced fetch 
   watch: {
+
     search: "debouncedFetchProducts", //  search changes
-    selectedCategory: "debouncedFetchProducts", // category changes
     "pagination.currentPage": "fetchProducts", // pagination changes
+
+    selectedCategory(val){
+      this.selectedCategory = val
+      this.fetchProducts()
+    }
   },
 
 

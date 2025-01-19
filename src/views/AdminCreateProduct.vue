@@ -44,7 +44,7 @@
             <v-select
               v-model="form.category_id"
               :items="categories"
-              item-text="name"
+             
               item-value="value"
               label="Category"
               outlined
@@ -98,10 +98,9 @@
           in_order: null,
           files: [], // Updated to accept multiple files as an array
         },
-        categories: [
-          { name: "Category 1", value: 1 },
-          { name: "Category 2", value: 2 },
-        ],
+        // the select component uses title and value always
+        categories: [{title: "first category", value: 1 }, {title: "second category", value: 2 }], 
+
         error: "", // To display errors
       };
     },
