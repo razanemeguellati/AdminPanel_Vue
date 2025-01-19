@@ -7,8 +7,8 @@
               Oops! Page Not Found
             </v-card-title>
             <v-card-text>
-              <p>The page you are looking for doesn't exist or has been moved.</p>
-              <p>Use the button below to navigate back to safety.</p>
+              <p>The page you are looking for doesn't exist.</p>
+              <p>Go back to safety.</p>
             </v-card-text>
             <v-card-actions class="justify-center">
               <v-btn color="primary" @click="goHome">Go to Home</v-btn>

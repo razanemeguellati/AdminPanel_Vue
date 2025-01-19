@@ -133,7 +133,7 @@ export default {
       try {
         await axios.post(`/admin/orders/${this.order.id}/delete`);
         
-        this.dialog = false; // Close the dialog
+        this.dialog = false; 
         this.$router.push("/admin/orders"); // Redirect to the orders list
       } catch (error) {
         console.error("Error deleting order:", error);
