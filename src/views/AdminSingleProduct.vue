@@ -74,6 +74,8 @@ export default {
       // Construct the full URL for the image
       return `http://192.168.1.17:8000/api/admin/products/${image}`; // Replace with your actual backend URL
     },
+
+    
     async handleDelete() {
       const productId = this.$route.params.id; // Get product ID from the route
 

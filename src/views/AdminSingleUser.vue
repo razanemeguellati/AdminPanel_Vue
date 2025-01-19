@@ -11,27 +11,75 @@
         <p><strong>Role:</strong> {{ user.role?.name || "N/A" }}</p>
 
         <!-- Delete User Button -->
-        <v-btn color="error" @click="deleteUser" block>Delete User</v-btn>
-
-        <!-- Block User Button -->
-        <v-btn
-          v-if="user.status === 'active'"
-          color="warning"
-          @click="blockUser"
-          block
-        >
-          Block User
-        </v-btn>
+        <v-btn color="error" @click="dialog = 'delete'" block>Delete User</v-btn>
 
         <!-- Activate User Button -->
         <v-btn
           v-if="user.status === 'blocked'"
           color="success"
-          @click="activateUser"
+          @click="dialog = 'activate'"
           block
         >
           Activate User
         </v-btn>
+
+        <!-- Block User Button -->
+        <v-btn
+          v-if="user.status === 'active'"
+          color="warning"
+          @click="dialog = 'block'"
+          block
+        >
+          Block User
+        </v-btn>
+
+        <!-- Dialog Component -->
+        <v-dialog v-model="dialog" max-width="500">
+          <v-card>
+            <v-card-title class="headline">
+              Confirm Action
+            </v-card-title>
+            <v-card-text>
+              <div v-if="dialog === 'delete'">
+                Are you sure you want to delete the user: <strong>{{ user.name }}</strong>?
+              </div>
+              <div v-else-if="dialog === 'activate'">
+                Are you sure you want to activate the user: <strong>{{ user.name }}</strong>?
+              </div>
+              <div v-else-if="dialog === 'block'">
+                Are you sure you want to block the user: <strong>{{ user.name }}</strong>?
+              </div>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn
+                v-if="dialog === 'delete'"
+                color="red"
+                text
+                @click="deleteUser"
+              >
+                Yes
+              </v-btn>
+              <v-btn
+                v-else-if="dialog === 'activate'"
+                color="green"
+                text
+                @click="activateUser"
+              >
+                Yes
+              </v-btn>
+              <v-btn
+                v-else-if="dialog === 'block'"
+                color="orange"
+                text
+                @click="blockUser"
+              >
+                Yes
+              </v-btn>
+              <v-btn color="blue" text @click="dialog = false">Cancel</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </v-card-text>
     </v-card>
 
@@ -47,6 +95,7 @@ export default {
   data() {
     return {
       user: null, // Initialize user as null
+      dialog: false, // Dialog state (used for delete, activate, and block actions)
     };
   },
   methods: {
@@ -60,44 +109,45 @@ export default {
         alert("Failed to fetch user details. Please try again.");
       }
     },
-    async deleteUser() {
-      if (confirm(`Are you sure you want to delete user ${this.user.name}?`)) {
-        try {
-          await axios.delete(`/admin/users/${this.user.id}`);
-          alert("User deleted successfully!");
-          this.$router.push("/admin/users");
-        } catch (error) {
-          console.error("Error deleting user:", error);
-          alert("Failed to delete the user.");
-        }
-      }
-    },
-    async blockUser() {
-      if (confirm(`Are you sure you want to block user ${this.user.name}?`)) {
-        try {
-          await axios.post(`/admin/users/${this.user.id}/block`);
-          alert("User blocked successfully!");
-          this.fetchUser(); // Refresh user data
-        } catch (error) {
-          console.error("Error blocking user:", error);
-          alert("Failed to block the user.");
-        }
-      }
-    },
-    async activateUser() {
-      if (confirm(`Are you sure you want to activate user ${this.user.name}?`)) {
-        try {
-          console.log(this.user.id);
-          await axios.post(`/admin/users/${this.user.id}/active`);
-          alert("User has been activated successfully!");
-          this.fetchUser(); // Refresh user data
-        } catch (error) {
-          console.error("Error activating user:", error);
-          alert("Failed to activate the user.");
-        }
-      }
-    }
 
+    async deleteUser() {
+      try {
+        await axios.delete(`/admin/users/${this.user.id}`);
+        this.dialog = false; // Close the dialog
+        alert("User deleted successfully!");
+        this.$router.push("/admin/users"); // Redirect to users list
+      } catch (error) {
+        console.error("Error deleting user:", error);
+        this.dialog = false; // Close the dialog even on error
+        alert("Failed to delete the user.");
+      }
+    },
+
+    async activateUser() {
+      try {
+        await axios.post(`/admin/users/${this.user.id}/active`);
+        this.dialog = false; // Close the dialog
+        alert("User activated successfully!");
+        this.fetchUser(); // Refresh user data
+      } catch (error) {
+        console.error("Error activating user:", error);
+        this.dialog = false; // Close the dialog even on error
+        alert("Failed to activate the user.");
+      }
+    },
+
+    async blockUser() {
+      try {
+        await axios.post(`/admin/users/${this.user.id}/block`);
+        this.dialog = false; // Close the dialog
+        alert("User blocked successfully!");
+        this.fetchUser(); // Refresh user data
+      } catch (error) {
+        console.error("Error blocking user:", error);
+        this.dialog = false; // Close the dialog even on error
+        alert("Failed to block the user.");
+      }
+    },
   },
   async created() {
     this.fetchUser(); // Fetch the user data on component creation
