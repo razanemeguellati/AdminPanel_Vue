@@ -9,6 +9,8 @@
   "dependencies": {
     "@fontsource/poppins": "^5.1.1",
     "@mdi/font": "5.9.55",
+    "@vee-validate/i18n": "^4.15.0",
+    "@vee-validate/rules": "^4.15.0",
     "axios": "^1.7.9",
     "core-js": "^3.8.3",
     "lodash": "^4.17.21",
@@ -17,10 +19,12 @@
     "pusher-js": "^8.4.0-rc2",
     "roboto-fontface": "*",
     "sockjs-client": "^1.6.1",
+    "vee-validate": "^4.15.0",
     "vue": "^3.2.13",
     "vue-router": "^4.5.0",
     "vuetify": "^3.0.0-beta.0",
-    "webfontloader": "^1.0.0"
+    "webfontloader": "^1.0.0",
+    "yup": "^1.6.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~5.0.0",
