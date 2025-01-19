@@ -44,7 +44,7 @@
             <v-select
               v-model="form.category_id"
               :items="categories"
-              item-text="text"
+              item-text="name"
               item-value="value"
               label="Category"
               outlined
@@ -62,14 +62,7 @@
             :class="{ 'switch-on': form.in_stock, 'switch-off': !form.in_stock }"
             ></v-switch>
 
-            <!-- In Order -->
-            <v-switch
-            v-model="form.in_order"
-            label="In Order"
-            inset
-            :class="{ 'switch-on': form.in_order, 'switch-off': !form.in_order }"
-            ></v-switch>
-  
+           
             <!-- File Upload -->
             <v-file-input
               v-model="form.files"
@@ -102,12 +95,12 @@
           quantity: "",
           category_id: null,
           in_stock: true,
-          in_order: false,
+          in_order: null,
           files: [], // Updated to accept multiple files as an array
         },
         categories: [
-          { text: "Category 1", value: 1 },
-          { text: "Category 2", value: 2 },
+          { name: "Category 1", value: 1 },
+          { name: "Category 2", value: 2 },
         ],
         error: "", // To display errors
       };

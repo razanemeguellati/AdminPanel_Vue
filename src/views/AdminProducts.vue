@@ -103,6 +103,7 @@ export default {
     };
   },
 
+
   methods: {
     async fetchProducts() {
       this.loading = true;
@@ -110,7 +111,8 @@ export default {
         const response = await axios.get(
           `/admin/products?category=${this.selectedCategory || ""}&search=${this.search}&page=${this.pagination.currentPage}`
         );
-
+        console.log(`/admin/products?category=${this.selectedCategory || ""}&search=${this.search}&page=${this.pagination.currentPage}`
+        )
         this.products = response.data.data;
         this.pagination = {
           currentPage: response.data.pagination.currentPage,
@@ -119,7 +121,6 @@ export default {
           total: response.data.pagination.total,
         };
 
-        console.log("Fetched Products:", this.products);
       } catch (error) {
         console.error("Error fetching products:", error);
       } finally {
@@ -128,7 +129,7 @@ export default {
     },
 
     viewProduct(id) {
-      // Navigate to the product details page with the product ID
+      // Navigate to the product details page when clicking on the product
       this.$router.push(`/admin/products/${id}`);
     },
   },
@@ -137,20 +138,20 @@ export default {
     // Debounced version of fetchProducts to handle real-time filtering
     this.debouncedFetchProducts = _.debounce(this.fetchProducts, 300);
     this.fetchProducts(); // Fetch products on component creation
+    console.log(this.selectedCategory)
   },
 
+  // watching the variable that change and fire the debounced fetch 
   watch: {
-   
-    search() {
-     // this.pagination.currentPage = 1;
-    },
-    selectedCategory() {
-     // this.pagination.currentPage = 1;
-    },
+    search: "debouncedFetchProducts", //  search changes
+    selectedCategory: "debouncedFetchProducts", // category changes
+    "pagination.currentPage": "fetchProducts", // pagination changes
   },
+
+
 };
 </script>
 
+
 <style scoped>
-/* Add additional styling if needed */
 </style>
