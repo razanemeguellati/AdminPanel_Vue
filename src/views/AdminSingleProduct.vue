@@ -36,7 +36,24 @@
         </div>
 
         <!-- Delete Product Button -->
-        <v-btn color="error" @click="deleteProduct" block>Delete Product</v-btn>
+        <v-btn color="error" @click="dialog = true" block>Delete Product</v-btn>
+
+        <!-- Delete Confirmation Dialog -->
+        <v-dialog v-model="dialog" max-width="500">
+          <v-card>
+            <v-card-title class="headline">
+              Confirm Deletion
+            </v-card-title>
+            <v-card-text>
+              Are you sure you want to delete the product: <strong>{{ product.name }}</strong>?
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="red" text @click="handleDelete">Yes</v-btn>
+              <v-btn color="blue" text @click="dialog = false">Cancel</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </v-card-text>
     </v-card>
   </v-container>
@@ -49,6 +66,7 @@ export default {
   data() {
     return {
       product: {}, // Product data
+      dialog: false, // Dialog state
     };
   },
   methods: {
@@ -56,15 +74,8 @@ export default {
       // Construct the full URL for the image
       return `http://192.168.1.17:8000/api/admin/products/${image}`; // Replace with your actual backend URL
     },
-    async deleteProduct() {
+    async handleDelete() {
       const productId = this.$route.params.id; // Get product ID from the route
-      const confirmDelete = confirm(
-        `Are you sure you want to delete the product: ${this.product.name}?`
-      ); // Ask for user confirmation
-
-      if (!confirmDelete) {
-        return; // Exit if user cancels
-      }
 
       try {
         const response = await axios.post(
@@ -72,11 +83,13 @@ export default {
         );
         console.log("Delete Response:", response.data);
 
-        // Navigate back to the products list or display a success message
+        // Close the dialog and navigate back to the products list
+        this.dialog = false;
         alert("Product deleted successfully!");
         this.$router.push("/admin/products");
       } catch (error) {
         console.error("Error deleting product:", error.response || error);
+        this.dialog = false;
         alert("Failed to delete the product. Please try again.");
       }
     },
