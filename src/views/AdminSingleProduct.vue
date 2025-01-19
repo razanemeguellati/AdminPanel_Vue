@@ -87,7 +87,6 @@ export default {
 
         // Close the dialog and navigate back to the products list
         this.dialog = false;
-        alert("Product deleted successfully!");
         this.$router.push("/admin/products");
       } catch (error) {
         console.error("Error deleting product:", error.response || error);

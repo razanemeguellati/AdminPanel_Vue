@@ -56,11 +56,6 @@ export default {
         // Extract token and role
         const { token, role } = response.data.user;
         console.log( response.data.user)
-        // Save token, email, role, and client ID in localStorage
-        // localStorage.setItem("token", token);
-        // localStorage.setItem("clientEmail", this.email); // Corrected from `this.form.email`
-        // localStorage.setItem("role", role || "client"); // Default role is 'client'
-        // localStorage.setItem("clientId", response.data.user.id); // Save client ID
 
         const authStore = useAuthStore();
           authStore.setAuthData(

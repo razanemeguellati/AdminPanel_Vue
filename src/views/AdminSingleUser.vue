@@ -127,7 +127,6 @@ export default {
       try {
         await axios.post(`/admin/users/${this.user.id}/active`);
         this.dialog = false; // Close the dialog
-        alert("User activated successfully!");
         this.fetchUser(); // Refresh user data
       } catch (error) {
         console.error("Error activating user:", error);
@@ -140,7 +139,6 @@ export default {
       try {
         await axios.post(`/admin/users/${this.user.id}/block`);
         this.dialog = false; // Close the dialog
-        alert("User blocked successfully!");
         this.fetchUser(); // Refresh user data
       } catch (error) {
         console.error("Error blocking user:", error);
